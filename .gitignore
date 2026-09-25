@@ -1,0 +1,52 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ansible
+*.retry
+ansible/.vault_pass
+ansible/vault-password*
+
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+*.crt
+secrets/
+credentials/
+
+# Kubernetes
+kubeconfig
+*.kubeconfig
+
+# Jenkins
+jenkins_home/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+logs/
+*.tmp
+*.swp
