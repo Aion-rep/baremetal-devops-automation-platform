@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-k8s-deployer-agent
+  namespace: devops-automation
+  labels:
+    app: jenkins-k8s-deployer-agent
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: jenkins-k8s-deployer-agent
+
+  template:
+    metadata:
+      labels:
+        app: jenkins-k8s-deployer-agent
+
+    spec:
+      serviceAccountName: jenkins-deployer
+
+      imagePullSecrets:
+        - name: harbor-pull-secret
+
+      containers:
+        - name: jenkins-agent
+          image: repo.fiberathome.cloud/devops-automation/jenkins-k8s-agent@sha256:909df9f55803e6e021d518de06b87ab72f84796a4768720f70427326985f2654
+          imagePullPolicy: IfNotPresent
+
+
+          env:
+            - name: JENKINS_URL
+              value: "http://103.118.86.148:8080"
+
+            - name: JENKINS_AGENT_NAME
+              value: "k8s-deployer-agent"
+
+            - name: JENKINS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-agent-secret
+                  key: secret
+
+            - name: JENKINS_WEB_SOCKET
+              value: "true"
+
+            - name: JENKINS_AGENT_WORKDIR
+              value: "/home/jenkins/agent"
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
