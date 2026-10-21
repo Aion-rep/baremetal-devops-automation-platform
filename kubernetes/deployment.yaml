@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-demo-app
+  namespace: devops-automation
+  labels:
+    app: devops-demo-app
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: devops-demo-app
+
+  template:
+    metadata:
+      labels:
+        app: devops-demo-app
+
+    spec:
+      imagePullSecrets:
+        - name: harbor-pull-secret
+
+      containers:
+        - name: devops-demo-app
+          image: repo.fiberathome.cloud/devops-automation/devops-demo-app@sha256:c39b6ad7159b338c1fd0fd8c2f0d8742ddb13fce178e686c2e7e67d148aed518
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: http
+              containerPort: 8080
+
+          env:
+            - name: APP_ENV
+              value: "production"
+
+            - name: APP_VERSION
+              value: "test"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 999
+            runAsGroup: 999
+            capabilities:
+              drop:
+                - ALL
