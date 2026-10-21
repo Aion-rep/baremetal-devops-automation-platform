@@ -145,6 +145,8 @@ pipeline {
                     kubectl -n devops-automation \
                       rollout status deployment/devops-demo-app \
                       --timeout=180s
+                    curl --fail --silent --show-error \
+                      http://devops-demo-app.devops-automation.svc.cluster.local/health
                 '''
             }
         }
