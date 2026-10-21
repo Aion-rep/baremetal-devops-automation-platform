@@ -1,0 +1,8 @@
+---
+- name: Apply baseline configuration to Kubernetes nodes
+  hosts: k8s
+  become: true
+  gather_facts: true
+
+  roles:
+    - node_baseline

@@ -1,0 +1,8 @@
+baseline_packages:
+  - curl
+  - git
+  - jq
+  - unzip
+  - ca-certificates
+
+baseline_directory: /opt/devops-automation
